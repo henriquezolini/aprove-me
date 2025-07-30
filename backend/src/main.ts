@@ -6,33 +6,44 @@ import * as express from 'express';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(express.json({ limit: '10mb' }));
-  app.use(express.urlencoded({ limit: '10mb', extended: true }));
-  app.use(express.raw({ limit: '10mb' }));
-  app.use(express.text({ limit: '10mb' }));
+  const bodyParserOptions = { limit: '10mb' };
+  app.use(express.json(bodyParserOptions));
+  app.use(express.urlencoded({ ...bodyParserOptions, extended: true }));
+  app.use(express.raw(bodyParserOptions));
+  app.use(express.text(bodyParserOptions));
+
 
   app.enableCors({
-    origin: true,
+    origin: true, 
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length'],
   });
 
+
   app.use((req, res, next) => {
-    req.setTimeout(300000);
-    res.setTimeout(300000);
+    const timeoutMs = 5 * 60 * 1000;
+    req.setTimeout(timeoutMs);
+    res.setTimeout(timeoutMs);
     next();
   });
 
+ 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
+      whitelist: true, 
+      forbidNonWhitelisted: true, 
+      transform: true, 
     }),
   );
 
+  
   await app.startAllMicroservices();
-  await app.listen(process.env.PORT ?? 3000);
+
+ 
+  const port = process.env.PORT ?? 3000;
+  await app.listen(port);
+  console.log(`🚀 Application is running on: http://localhost:${port}`);
 }
+
 bootstrap();
