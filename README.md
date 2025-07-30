@@ -1,261 +1,254 @@
-<p align="center">
-  <img src="./assets/logo-bankme.png" alt="Logo Bankme" width="91" height="108">
-</p>
-<h1 align="center">
-  Aprove-me
-</h1>
+# 📘 Projeto Aprova-me
 
-## Sumário
+## Índice
 
-- [Sumário](#sumário)
-- [❤️ Bem vindos](#️-bem-vindos)
-- [🚀 Vamos nessa!](#-vamos-nessa)
-  - [Dicas](#dicas)
-  - [Como você deverá desenvolver?](#como-você-deverá-desenvolver)
-  - [Qual o tempo para entregar?](#qual-o-tempo-para-entregar)
-- [💻 O Problema](#-o-problema)
-  - [Estrutura de um recebível](#estrutura-de-um-recebível)
-  - [Estrutrua de um cedente](#estrutrua-de-um-cedente)
-- [💾 Back-end](#-back-end)
-  - [Nível 1 - Validação](#nível-1---validação)
-  - [Nível 2 - Persistência](#nível-2---persistência)
-  - [Nível 3 - Testes](#nível-3---testes)
-  - [Nível 4 - Autenticação](#nível-4---autenticação)
-  - [Nível 5 - Gerenciamento de permissões](#nível-5---gerenciamento-de-permissões)
-  - [Nível 6 - Infra e Doc](#nível-6---infra-e-doc)
-  - [Nível 7 - Lotes](#nível-7---lotes)
-  - [Nível 8 - Resiliência](#nível-8---resiliência)
-  - [Nível 9 - Cloud](#nível-9---cloud)
-  - [Nível 10 - Infra as a Code](#nível-10---infra-as-a-code)
-- [🖥️ Front-end](#️-front-end)
-  - [Nível 1 - Cadastro](#nível-1---cadastro)
-  - [Nível 2 - Conectando na API](#nível-2---conectando-na-api)
-  - [Nível 3 - Listando](#nível-3---listando)
-  - [Nível 4 - Autenticação](#nível-4---autenticação-1)
-  - [Nível 5 - Testes](#nível-5---testes)
+1. [🔧 Clonando o Repositório](#-clonando-o-repositório)
+2. [🚀 Backend - Guia de Execução](#-backend---guia-de-execução)
+   - [🛠️ Requisitos](#️-requisitos)
+   - [⚙️ Configuração do Projeto](#️-configuração-do-projeto)
+   - [✅ Testes](#-testes)
+   - [🔧 Comandos Úteis](#-comandos-úteis)
+   - [📂 Estrutura do Projeto](#-estrutura-do-projeto)
+   - [🔐 Autenticação](#-autenticação)
+   - [📋 Endpoints Principais](#-endpoints-principais)
+3. [🌐 Frontend - Guia Next.js](#-frontend---guia-nextjs)
 
-## ❤️ Bem vindos 
+---
 
-Olá, tudo certo?
+## 🔧 Clonando o Repositório
 
-Seja bem vindo ao teste de seleção para novos desenvolvedores na Bankme!
+```bash
+git clone https://github.com/henriquezolini/aprove-me.git
+cd aprove-me
+```
 
-Estamos honrados que você tenha chegado até aqui!
+---
 
-Prepare aquele ☕️ , e venha conosco codar e se divertir!
+## 🚀 Backend - Guia de Execução
 
-## 🚀 Vamos nessa!
+### 🛠️ Requisitos
 
-Este é um teste para analisarmos como você desempenha ao entender, traduzir, resolver e entregar um código que resolve um problema.
+Certifique-se de ter instalado:
 
-### Dicas
+- Node.js (versão 20 ou superior)
+- Yarn
 
-- Documente;
-- Pergunte;
-- Mostre a sua linha de reciocínio;
-- Trabalhe bem o seu README.md;
+---
 
-### Como você deverá desenvolver?
+### ⚙️ Configuração do Projeto
 
-1. Faça um clone deste projeto em seu GitHub pessoal;
-2. Realize as implementações de acordo com cada um dos níveis;
-3. Faça pequenos commits;
-4. Depois de sentir que fez o seu máximo, faça um PR para o repositório original. (Para conseguir fazer isso, não se esqueça de fazer um Fork antes de iniciar tudo!)
+#### 1. Instalar Dependências
 
-**IMPORTANTE!**
+```bash
+cd backend
+yarn
+```
 
-Não significa que você precisa implementar todos os níveis para ser aprovado no processo!
+#### 2. Variáveis de Ambiente
 
-Faça até onde se sentir confortável.
+Crie um arquivo `.env` no diretório `backend/` com o seguinte conteúdo:
 
-### Qual o tempo para entregar?
+```env
+DATABASE_URL="file:./dev.db"
+JWT_SECRET="JWT_SECRET"
+NODE_ENV=development
+PORT=3000
+```
 
-Nós temos um período para fechar a vaga em questão. Então, quanto antes você enviar, mais cuidado podemos ter na revisão do seu teste.
+#### 3. Inicializar Banco de Dados
 
-Mas sabemos que o dia a dia é corrido, faça de forma que fique confortável para você!
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
 
-Mas não desista! Envie até onde conseguir.
+#### 4. Rodar a Aplicação
 
-## 💻 O Problema
+- Para desenvolvimento (com hot reload):
 
-Um cliente da Bankme solicitou uma nova funcionalidade, relacionada a recebíveis.
+```bash
+yarn start:dev
+```
 
-Todos os dias esse cliente movimenta vários recebíveis, e nosso time de operações estava ficando maluco tendo que cadastrar tudo isso de forma manual!
+- Para produção:
 
-Os recebíveis são representações digitais de um documento que simula uma dívida a ser recebida. E para Bankme, é importante ter essas informações como parte do fluxo comercial que temos com este cliente.
+```bash
+yarn build
+yarn start:prod
+```
 
-### Estrutura de um recebível
+---
 
-| CAMPO        | TIPO          | DESCRIÇÃO                                 |
-|--------------|---------------|-------------------------------------------|
-| id           | string (UUID) | É a identificação de um recebível.        |
-| value        | float         | É o valor do recebível.                   |
-| emissionDate | date          | É a data de emissão do recebível.         |
-| assignor     | string (UUID) | Representa a identificação de um cedente. |
+### ✅ Testes
 
-### Estrutrua de um cedente
+Para executar os testes:
 
-| CAMPO    | TIPO          | DESCRIÇÃO                             |
-|----------|---------------|---------------------------------------|
-| id       | string (UUID) | É a identificação de um cedente.      |
-| document | string(30)    | É o documento CPF ou CNPJ do cedente. |
-| email    | string(140)   | É o email do cedente.                 |
-| phone    | string(20)    | É o telefone do cedente.              |
-| name     | string(140)   | É a nome ou razão social do cedente.  |
+```bash
+yarn test         # Testes unitários
+yarn test:cov     # Cobertura de testes
+yarn test:e2e     # Testes end-to-end
+```
 
-## 💾 Back-end
+---
 
-### Nível 1 - Validação
+### 🔧 Comandos Úteis
 
-Implemente uma API utilizando NestJS que receba dados de um recebível e de um cedente.
+- Visualizar banco de dados com Prisma Studio:
 
-A rota para este cadastro é:
+```bash
+npx prisma studio
+```
 
-`POST /integrations/payable`
+- Resetar banco de dados:
 
-Essa rota deverá receber todas as informações. É importante garantir a validação destes dados:
+```bash
+npx prisma migrate reset
+```
 
-1. Nenhum campo pode ser nulo;
-2. Os ids devem ser do tipo UUID;
-3. As strings não podem ter caracteres a mais do que foi definido em sua estrutura;
+- Aplicar alterações no schema sem criar uma migration:
 
-Se algum campo não estiver preenchido corretamente, deve-se retornar uma mensagem para o usuário mostrando qual o problema foi encontrado em qual campo.
+```bash
+npx prisma db push
+```
 
-Se todos os dados estiverem validados. Apenas retorne todos os dados em um formato JSON.
+---
 
-### Nível 2 - Persistência
+### 📂 Estrutura do Projeto
 
-Utilize o Prisma, para incluir um novo banco de dados SQLite.
+#### 📁 Domain
 
-Crie a estrutura de acordo com o que foi definido.
+Contém as entidades e regras de negócio centrais.
 
-Caso os dados estejam válidos, cadastre-os.
+- `entities/` - Entidades do domínio
+- `repositories/` - Interfaces dos repositórios
+- `interfaces/` - Interfaces do domínio
 
-Crie 2 novas rotas:
+#### 📁 Application
 
-`GET /integrations/payable/:id`
+Casos de uso e lógica de aplicação.
 
-`GET /integrations/assignor/:id`
+- `use-cases/` - Casos de uso
+- `services/` - Serviços de aplicação
+- `interfaces/` - Interfaces da camada
 
-Para que seja possível retornar pagáveis e cedentes de forma independete.
+#### 📁 Infrastructure
 
-Inclua também rotas para as outras operações:
+Implementações concretas de infraestrutura.
 
-- Edição;
-- Exclusão;
-- Cadastro;
+- `database/` - Configuração do Prisma
+- `repositories/` - Implementações reais
+- `external/` - Integrações externas
 
-### Nível 3 - Testes
+#### 📁 Presentation
 
-Crie testes unitários para cada arquivo da aplicação. Para cada nova implementação a seguir, também deve-se criar os testes.
+Controllers, DTOs e Guards.
 
-### Nível 4 - Autenticação
+- `controllers/` - Lógica dos endpoints
+- `dtos/` - Data Transfer Objects
+- `guards/` - Autenticação/autorização
 
-Inclua um sistema de autenticação em todas as rotas.
+#### 📁 Shared
 
-Para isso, crie uma nova rota:
+Itens reutilizáveis no projeto.
 
-`POST /integrations/auth` que deve receber:
+- `config/` - Configurações globais
+- `utils/` - Funções utilitárias
+- `decorators/` - Decorators customizados
+
+---
+
+### 🔐 Autenticação
+
+Para acessar rotas protegidas, obtenha um token JWT enviando:
+
+**Requisição:**
 
 ```json
+POST /integrations/auth
 {
   "login": "aprovame",
   "password": "aprovame"
 }
 ```
 
-Com essas credenciais o endpoint deverá retornar um JWT com o tempo de expiração de 1 minuto.
+**Resposta:**
 
-Reescreva as regras de todas as outras rotas para que o JWT seja enviado como parâmetro do `Header` da requisição.
+```json
+{
+  "access_token": "token.jwt.aqui",
+  "expires_in": 2592000
+}
+```
 
-Se o JWT estiver válido, então os dados devem ser mostrados, caso contrário, deve-se mostrar uma mensagem de "Não autorizado".
+---
 
-### Nível 5 - Gerenciamento de permissões
+### 📋 Endpoints Principais
 
-Agora, crie um sistema de gerenciamento de permissões.
+| Método | Rota                       | Descrição           |
+| ------ | -------------------------- | ------------------- |
+| POST   | /integrations/auth         | Autenticação        |
+| POST   | /integrations/payable      | Criar recebível     |
+| GET    | /integrations/payable/:id  | Obter recebível     |
+| PUT    | /integrations/payable/:id  | Atualizar recebível |
+| DELETE | /integrations/payable/:id  | Remover recebível   |
+| GET    | /integrations/assignor/:id | Obter cedente       |
+| PUT    | /integrations/assignor/:id | Atualizar cedente   |
+| DELETE | /integrations/assignor/:id | Remover cedente     |
 
-Crie um novo cadastro de permissões. Esse cadastro deve armazenar: `login` e `password`.
+---
 
-Refatore o endpoint de autenticação para que sempre se gere JWTs se login e senha estiverem cadastrados no Banco de Dados.
+## 🌐 Frontend - Guia Next.js
 
-### Nível 6 - Infra e Doc
+### 🛠️ Requisitos
 
-Crie um `Dockerfile` para sua API.
+- Node.js (versão recomendada: `>=20.x`)
+- Yarn
 
-Crie um `docker-compose.yaml` para iniciar o seu projeto.
+---
 
-Documente tudo o que foi feito até aqui:
+### 📦 Instalação
 
-- Como preparar o ambiente;
-- Como instalar as dependência;
-- Como rodar o projeto;
+```bash
+cd frontend
+yarn install
+```
 
-### Nível 7 - Lotes
+---
 
-Crie um novo recurso de processamento de pagáveis por lotes.
+### ▶️ Rodando em Desenvolvimento
 
-A ideia é que o cliente possa enviar um GRANDE número de pagáveis de uma única vez. E isso, não poderá ser processado de forma síncrona.
+```bash
+yarn dev
+```
 
-Crie um novo endpoint:
+Acesse no navegador: [http://localhost:3000](http://localhost:3000)
 
-`POST integrations/payable/batch`
+---
 
-Neste endpoint deve ser possível receber lotes de até 10.000 pagáveis.
+### 🧪 Comandos Úteis
 
-Ao receber todos os pagáveis, deve-se postá-los em uma fila.
+#### 🔍 Lint
 
-Crie um consumidor para esta fila que deverá pegar pagável por pagável, criar seu registro no banco de dados, e ao final do processamento do lote enviar um e-mail de lote processado, com o número de sucesso e falhas.
+```bash
+yarn lint
+```
 
-### Nível 8 - Resiliência
+#### 🧪 Testes
 
-Caso não seja possível processar algum ítem do lote, coloque-o novamente na fila. Isso deve ocorrer por até 4 vezes. Depois, esse ítem deve ir para uma "Fila Morta" e um e-mail deve ser disparado para o time de operações.
+```bash
+yarn test
+```
 
-### Nível 9 - Cloud
+#### 🏗️ Build de Produção
 
-Crie uma pipeline de deploy da aplicação em alguma estrutura de Cloud. (AWS, Google, Azure...)
+```bash
+yarn build
+```
 
-### Nível 10 - Infra as a Code
+#### 🚀 Rodar Produção Localmente
 
-Crie uma estrutura em terraforma que monte a infra-estrutura desejada.
+```bash
+yarn start
+```
 
-## 🖥️ Front-end
-
-### Nível 1 - Cadastro
-
-Crie uma interface na qual é possível cadastrar os pagáveis.
-
-É importante que sua interface previna o cadastro de campos vazios, ou que não estejam nas regras definidas anteriormente.
-
-Exiba o pagável cadastrado em uma nova tela.
-
-### Nível 2 - Conectando na API
-
-Conecte a seu Front-end a API que foi criada, e faça o cadastro de um pagável refletir na sua API.
-
-Faça também uma tela para cadastro do cedente.
-
-Altere o cadastro inicial para que o campo `assignor` seja um `combobox` no qual seja possível selecionar um cedente.
-
-### Nível 3 - Listando
-
-Agora faça um sistema de listagens de pagáveis. Mostrando apenas: `id`, `value` e `emissionDate`.
-
-Para cada ítem da lista, coloque um link que mostra os detalhes do pagável.
-
-Além disso, coloque opções de editar e excluir.
-
-Nessa página de detalhes, inclua um novo link para exibir os dados do cedente.
-
-Todos os dados devem vir da API.
-
-### Nível 4 - Autenticação
-
-Implemente agora o sistema de login e senha para poder acessar as suas rotas de forma autenticada.
-
-Armazene o token no `localStorage` do seu navegador.
-
-Caso o token expire, redirecione o usuário para a página de login.
-
-### Nível 5 - Testes
-
-Crie testes para sua aplicação Front-end.
+---
